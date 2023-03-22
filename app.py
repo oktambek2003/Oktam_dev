@@ -15,19 +15,10 @@ app = Flask(__name__)
 TOKEN = "6063934394:AAExwcUz_3z3LICpws1dzUfZjqN7KtOLbMk"
 bot = Bot(TOKEN)
 
-@app.route('/home', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def home():
-    if request.method == 'GET':
-        return 'hello'
-    if request.method == "POST":
-        data = request.get_json(force=True)
-
-        dispatcher: Dispatcher = Dispatcher(bot, None, workers=0)
-        update: Update = Update.de_json(data, bot)
-
-        dispatcher.add_handler(CommandHandler("start", start))
-
-        dispatcher.add_handler(CallbackQueryHandler(query))
-
-        dispatcher.process_update(update)
+        
         return 'welcome'
+if __name__ == '__main__':
+    # Run the app in local network
+    app.run()
