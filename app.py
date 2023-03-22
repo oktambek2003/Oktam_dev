@@ -1,24 +1,44 @@
-from telegram import Bot, Update
-from telegram.ext import CommandHandler, CallbackQueryHandler, CallbackContext, Updater, Dispatcher
+import os
 from flask import Flask, request
-import requests
+from telegram import Bot, Update
+from telegram.ext import Dispatcher, CommandHandler, MessageHandler, CallbackQueryHandler, Filters
+
+# import callback functions
 from main import (
     start,
-    pictures,
-    query,
-
+    query
 )
 
 app = Flask(__name__)
 
 # bot
-TOKEN = "6063934394:AAExwcUz_3z3LICpws1dzUfZjqN7KtOLbMk"
-bot = Bot(TOKEN)
+TOKEN = os.environ['TOKEN']
+bot = Bot(token=TOKEN)
+
 
 @app.route('/', methods=['POST', 'GET'])
-def home():
+def main():
+    if request.method == 'GET':
+        return {'status': 200}
+
+    elif request.method == 'POST':
+        # get data from request
+        data: dict = request.get_json(force=True)
+
+        # convert data to Update obj
+        update: Update = Update.de_json(data, bot)
+
+        # Dispatcher
+        dp: Dispatcher = Dispatcher(bot, None, workers=0)
+
+        # handlers
+        dp.add_handler(CommandHandler('start',start))
+    
+        dp.add_handler(CallbackQueryHandler(query))
+
+        # process update
         
-        return 'welcome'
-if __name__ == '__main__':
-    # Run the app in local network
-    app.run()
+        dp.add_handler(CommandHandler(start))
+        dp.add_handler(CallbackQueryHandler(query))
+        dp.process_update(update=update)
+        return {'status': 400}
