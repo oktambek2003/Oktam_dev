@@ -18,13 +18,7 @@ def start(update:Update, context:CallbackContext):
     bot = context.bot
     print(update.effective_chat.username)
     bot.send_photo(chat_id, rasm)
-    bot.send_message(chat_id, text, reply_markup = keyboard)
-    
-def pictures(update:Update, context:CallbackContext):
-    chat_id = update.message.chat_id
-    text = "Marhamat rasmlarni tanlang"
-    
-    
+    bot.send_message(chat_id, text, reply_markup = keyboard)    
 
 def query(update:Update, context: CallbackContext):
     query= update.callback_query
