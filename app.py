@@ -42,3 +42,6 @@ def main():
         dp.add_handler(CallbackQueryHandler(query))
         dp.process_update(update=update)
         return {'status': 400}
+
+if __name__=='__main__':
+    app.run()
